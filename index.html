@@ -317,9 +317,9 @@ body{font-family:"Berry","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sa
 .foot{display:flex;align-items:center;gap:8px;padding:8px 18px 8px 14px;font-size:calc(22px*var(--z))}.foot b{font-size:1.6em;line-height:1;font-weight:400}
 #lakeBack{display:none;left:calc(env(safe-area-inset-left,0px) + 14px);bottom:calc(env(safe-area-inset-bottom,0px) + 98px);width:44px;height:44px;padding:0;border:0;border-radius:50%;font-size:22px;line-height:1;align-items:center;justify-content:center;background:rgba(255,250,240,.9);box-shadow:0 2px 8px rgba(91,70,54,.25);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #lakeBack.on{display:flex}
-#homeBtn{display:none;right:calc(env(safe-area-inset-right,0px) + 12px);top:calc(env(safe-area-inset-top,0px) + 58px);width:44px;height:44px;padding:0;border:0;border-radius:50%;font-size:22px;line-height:1;align-items:center;justify-content:center;background:rgba(255,250,240,.9);box-shadow:0 2px 8px rgba(91,70,54,.25);cursor:pointer;-webkit-tap-highlight-color:transparent}
-#homeBtn.on{display:flex}
-@media (orientation:landscape) and (max-height:520px){#homeBtn{top:calc(env(safe-area-inset-top,0px) + 50px);width:38px;height:38px;font-size:19px}}
+#outBtn,#homeBtn{display:none;right:calc(env(safe-area-inset-right,0px) + 12px);top:calc(env(safe-area-inset-top,0px) + 58px);width:44px;height:44px;padding:0;border:0;border-radius:50%;font-size:22px;line-height:1;align-items:center;justify-content:center;background:rgba(255,250,240,.9);box-shadow:0 2px 8px rgba(91,70,54,.25);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#outBtn.on,#homeBtn.on{display:flex}
+@media (orientation:landscape) and (max-height:520px){#outBtn,#homeBtn{top:calc(env(safe-area-inset-top,0px) + 50px);width:38px;height:38px;font-size:19px}}
 @media (orientation:landscape) and (max-height:520px){#lakeBack{bottom:calc(env(safe-area-inset-bottom,0px) + 62px);width:38px;height:38px;font-size:19px}}
 .door{position:absolute;transform:translate(-50%,-100%);border:0;border-radius:999px;padding:10px 18px;font:inherit;font-size:calc(20px*var(--z));font-weight:700;color:var(--ink);background:rgba(255,250,240,.9);box-shadow:0 2px 8px rgba(91,70,54,.25);cursor:pointer;z-index:500;white-space:nowrap;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{margin-top:0}50%{margin-top:-6px}}
@@ -497,11 +497,11 @@ body{font-family:"Berry","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sa
 #bookBtn{display:none;right:calc(env(safe-area-inset-right,0px) + 14px);top:calc(env(safe-area-inset-top,0px) + 58px);width:42px;height:57px;padding:0;border:0;background:transparent;cursor:pointer;filter:drop-shadow(0 2px 5px rgba(20,60,90,.5));transition:transform .12s}
 #bookBtn img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
 #bookBtn.on{display:block}
-#homeBtn.on+#bookBtn{top:calc(env(safe-area-inset-top,0px) + 112px)}
+#homeBtn.on+#bookBtn,#outBtn.on~#bookBtn{top:calc(env(safe-area-inset-top,0px) + 112px)}
 #bookBtn:active{transform:scale(.92)}
 #bookBtn.pop{animation:bkpop .8s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes bkpop{0%{transform:scale(0) rotate(-25deg);opacity:0}100%{transform:none;opacity:1}}
-@media (orientation:landscape) and (max-height:520px){#bookBtn{top:calc(env(safe-area-inset-top,0px) + 50px);width:34px;height:46px}#homeBtn.on+#bookBtn{top:calc(env(safe-area-inset-top,0px) + 96px)}}
+@media (orientation:landscape) and (max-height:520px){#bookBtn{top:calc(env(safe-area-inset-top,0px) + 50px);width:34px;height:46px}#homeBtn.on+#bookBtn,#outBtn.on~#bookBtn{top:calc(env(safe-area-inset-top,0px) + 96px)}}
 #bookView{transition:opacity .4s;background:radial-gradient(ellipse at 50% 35%,#2aa6d0 0,#126a99 55%,#0b3f63 100%);display:none;flex-direction:column}
 #bookView.on{display:flex}
 #bkWrap{flex:1;position:relative;min-height:0}
@@ -683,6 +683,7 @@ body{font-family:"Berry","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sa
     <div style="display:flex;gap:6px"><div class="pill card" id="clock">--:--</div><div class="pill card" id="lovePill"><span id="faceB"></span><span id="heartE">💗</span><span id="love">0</span></div></div>
   </div>
   <button id="lakeBack" class="ui" aria-label="돌아가기">👣</button>
+  <button id="outBtn" class="ui on" aria-label="집 앞 갈림길로">🌿</button>
   <button id="homeBtn" class="ui" aria-label="집 안으로">🏠</button>
   <button id="bookBtn" class="ui" aria-label="도감"><img src="book-icon.webp" alt="" draggable="false"></button>
   <div id="menu" class="ui card">
@@ -1694,7 +1695,7 @@ function switchRoom(to,sx,sy,d){
     const r=ROOMS[to];
     curRoom=to;curWorld=r.el;IW=r.w;IH=r.h;FLOOR=r.floor;CHAR_W=r.charW;
     for(const key in ROOMS)ROOMS[key].el.style.display=key===to?'block':'none';
-    r.el.appendChild(ch);$('#lakeBack').classList.toggle('on',to==='lake'||to==='yard'||to==='garden'||to==='cove'||to==='cend'||to==='wood'||to==='wend'||to==='hill'||to==='fish');$('#homeBtn').classList.toggle('on',OUTDOOR.includes(to));{const wb=document.querySelector('#menu [data-a="wash"]');if(wb)wb.classList.toggle('off',OUTDOOR.includes(to))}
+    r.el.appendChild(ch);$('#lakeBack').classList.toggle('on',to==='lake'||to==='yard'||to==='garden'||to==='cove'||to==='cend'||to==='wood'||to==='wend'||to==='hill'||to==='fish');$('#homeBtn').classList.toggle('on',OUTDOOR.includes(to));$('#outBtn').classList.toggle('on',!OUTDOOR.includes(to));{const wb=document.querySelector('#menu [data-a="wash"]');if(wb)wb.classList.toggle('off',OUTDOOR.includes(to))}
     const hCtl=ctrlH(),uCtl=ctrlU();   // 하치와레·우사기를 움직이는 중이면 치이카와가 따라 들어와요
     if(hCtl||uCtl){const cp=clampPt(sx+d*110,sy);P.x=cp.x;P.y=cp.y}else{P.x=sx;P.y=sy}
     body.className='';flip.style.transform='scaleX('+(d<0?1:-1)+')';
@@ -1712,6 +1713,10 @@ $('#doorL').addEventListener('click',()=>{if(!sleeping&&!moving&&!hEvt&&curRoom=
 $('#doorB').addEventListener('click',()=>{if(!sleeping&&!moving&&!hEvt&&curRoom==='living'){arrivedSay=false;switchRoom('bath',420,930,1)}});
 $('#doorOut').addEventListener('click',()=>{if(!sleeping&&!moving&&!hEvt&&curRoom==='kitchen'){arrivedSay=false;switchRoom('outside',1330,830,-1)}});
 const OUTDOOR=['outside','lake','garden','cove','cend','yard','wood','wend','hill','fish'];   // 집 밖 장면들: 어디서든 🏠 버튼이 떠 있어요
+$('#outBtn').addEventListener('click',()=>{   // 🌿 집 안 어디서든 눌러서 집 앞 갈림길로 나가요
+  if(sleeping||moving||hEvt||OUTDOOR.includes(curRoom))return;
+  arrivedSay=false;switchRoom('outside',1330,830,-1);
+});
 $('#homeBtn').addEventListener('click',()=>{   // 🏠 집 바로가기: 어느 밖 장면에서든 눌러서 집으로 들어가요
   if(sleeping||moving||hEvt||!OUTDOOR.includes(curRoom))return;
   arrivedSay=false;
